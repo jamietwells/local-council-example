@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Example Ward Party | Proof of Concept</title>
+  <meta name="description" content="A simple proof-of-concept local party website layout." />
+
+  <style>
+    :root{
+      --bg: #f5f6f7;
+      --surface: #ffffff;
+      --text: #0b0c0c;
+      --muted: #505a5f;
+      --border: #d8dde0;
+      --focus: #ffbf47;
+
+      --brand: #0b3b75;      /* deep blue header */
+      --brand-2: #0a2f5f;    /* darker */
+      --accent: #1d70b8;     /* link/cta */
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+    a:focus, button:focus, input:focus{
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Top strip */
+    .top-strip{
+      background: #111;
+      color: #fff;
+      font-size: 14px;
+    }
+    .top-strip .inner{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+    .top-strip a{ color: #fff; text-decoration: underline; }
+
+    /* Header */
+    header{
+      background: var(--brand);
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .masthead{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+    .crest{
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.18);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+    .brand h1{
+      font-size: 18px;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .brand small{
+      display: block;
+      opacity: 0.9;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .header-actions{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,0.35);
+      background: transparent;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-weight: 650;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.08); }
+    .btn.primary{
+      background: #fff;
+      color: var(--brand-2);
+      border-color: #fff;
+    }
+    .btn.primary:hover{ background: #eef3ff; }
+
+    nav{
+      background: var(--brand-2);
+    }
+    .nav{
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      padding: 10px 0;
+      flex-wrap: wrap;
+    }
+    .nav a{
+      color: #fff;
+      font-weight: 600;
+      padding: 6px 0;
+    }
+    .nav a:hover{ text-decoration: underline; }
+
+    /* Hero */
+    .hero{
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner{
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      padding: 24px 0;
+    }
+    .hero h2{
+      margin: 0 0 10px 0;
+      font-size: 30px;
+      letter-spacing: -0.2px;
+    }
+    .hero p{
+      margin: 0 0 16px 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .search{
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      margin-top: 12px;
+    }
+    .search input{
+      flex: 1;
+      padding: 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
+      background: #fff;
+    }
+    .search button{
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .search button:hover{ filter: brightness(0.95); }
+
+    .hero-card{
+      background: #f8f9fb;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .hero-card h3{
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+    .hero-card ul{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .hero-card li{ margin: 6px 0; }
+    .hero-card .cta-row{
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hero-card .cta{
+      display: inline-block;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+    .hero-card .cta.secondary{
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .hero-card .cta:hover{ text-decoration: none; filter: brightness(0.97); }
+
+    /* Main */
+    main{ padding: 22px 0 40px; }
+
+    .section-title{
+      font-size: 22px;
+      margin: 0 0 14px 0;
+      letter-spacing: -0.2px;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 150px;
+    }
+    .card h4{
+      margin: 0;
+      font-size: 18px;
+    }
+    .card p{
+      margin: 0;
+      color: var(--muted);
+      flex: 1;
+    }
+    .card a{
+      font-weight: 700;
+      align-self: flex-start;
+    }
+
+    .split{
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .panel{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .panel h3{ margin: 0 0 8px 0; }
+    .panel ul{ margin: 0; padding-left: 18px; color: var(--muted); }
+    .panel li{ margin: 6px 0; }
+
+    /* Footer */
+    footer{
+      margin-top: 40px;
+      padding: 22px 0;
+      background: #111;
+      color: #fff;
+    }
+    footer a{ color: #fff; text-decoration: underline; }
+    .footer-inner{
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 18px;
+      font-size: 14px;
+    }
+    .fineprint{ opacity: 0.85; }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-inner{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .split{ grid-template-columns: 1fr; }
+      .footer-inner{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-strip">
+    <div class="container">
+      <div class="inner">
+        <div>Local party website prototype</div>
+        <div>
+          <a href="#accessibility">Accessibility</a> ·
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="masthead">
+        <div class="brand" aria-label="Site identity">
+          <div class="crest" aria-hidden="true">WP</div>
+          <div>
+            <h1>Example Ward Party <small>Working for our community</small></h1>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn" type="button">News</button>
+          <button class="btn" type="button">Volunteer</button>
+          <button class="btn primary" type="button">Donate</button>
+        </div>
+      </div>
+    </div>
+
+    <nav aria-label="Primary">
+      <div class="container">
+        <div class="nav">
+          <a href="#priorities">Priorities</a>
+          <a href="#councillors">Your councillors</a>
+          <a href="#campaigns">Campaigns</a>
+          <a href="#events">Events</a>
+          <a href="#contact">Report an issue</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero" aria-label="Intro">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <h2>Local action. Clear priorities. Practical help.</h2>
+          <p>
+            This is a simple, accessible layout you can reuse for any local party branch:
+            key links, quick actions, and a clear route to reporting issues.
+          </p>
+
+          <form class="search" role="search" aria-label="Search the site" onsubmit="return false;">
+            <input type="search" placeholder="Search: parking, bins, anti-social behaviour…" aria-label="Search" />
+            <button type="submit">Search</button>
+          </form>
+
+          <p style="margin-top:10px; font-size: 14px; color: var(--muted);">
+            Example searches: <a href="#">housing repairs</a>, <a href="#">street lighting</a>, <a href="#">schools</a>
+          </p>
+        </div>
+
+        <aside class="hero-card" aria-label="Quick actions">
+          <h3>Quick actions</h3>
+          <ul>
+            <li>Report a local issue (potholes, fly-tipping, noise)</li>
+            <li>Find your councillors and surgeries</li>
+            <li>Sign up for updates and campaigns</li>
+          </ul>
+
+          <div class="cta-row">
+            <a class="cta" href="#contact">Report an issue</a>
+            <a class="cta secondary" href="#events">Find events</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="container">
+      <h2 class="section-title" id="priorities">Top priorities</h2>
+
+      <div class="grid" role="list">
+        <article class="card" role="listitem">
+          <h4>Safer streets</h4>
+          <p>Work with residents and partners to tackle hotspots and improve lighting and visibility.</p>
+          <a href="#">See our plan</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h4>Clean neighbourhoods</h4>
+          <p>Fly-tipping response, litter picks, and practical fixes for bins and alleyways.</p>
+          <a href="#">Report a problem</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h4>Homes people can afford</h4>
+          <p>Push for repairs, better standards, and fair access to housing support.</p>
+          <a href="#">Get help</a>
+        </article>
+      </div>
+
+      <div class="split">
+        <section class="panel" id="campaigns" aria-label="Campaigns">
+          <h3>Latest campaigns</h3>
+          <ul>
+            <li><a href="#">Petition: improve crossings near the high street</a></li>
+            <li><a href="#">Update: progress on the park refurbishment</a></li>
+            <li><a href="#">Survey: what should we prioritise this spring?</a></li>
+          </ul>
+        </section>
+
+        <section class="panel" id="events" aria-label="Events">
+          <h3>Upcoming events</h3>
+          <ul>
+            <li>Residents’ drop-in surgery — Tue 6pm</li>
+            <li>Community litter pick — Sat 10am</li>
+            <li>Campaign planning — Sun 4pm (online)</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="split" style="margin-top:14px">
+        <section class="panel" id="councillors" aria-label="Your councillors">
+          <h3>Your councillors</h3>
+          <p style="margin:0; color: var(--muted);">
+            Add photos, bios, and surgery times. Keep this section consistent across wards.
+          </p>
+          <ul style="margin-top:10px">
+            <li><strong>Cllr A. Example</strong> — housing, community safety</li>
+            <li><strong>Cllr B. Example</strong> — transport, environment</li>
+          </ul>
+        </section>
+
+        <section class="panel" id="contact" aria-label="Contact">
+          <h3>Report an issue</h3>
+          <p style="margin:0; color: var(--muted);">
+            Simple form → email/CRM. In a real build you’d route this into a shared inbox, ticketing system,
+            or a council reporting link where appropriate.
+          </p>
+
+          <form style="margin-top:12px; display:grid; gap:10px" onsubmit="return false;">
+            <label>
+              <span style="display:block; font-weight:650;">What’s the issue?</span>
+              <input style="width:100%; padding:10px; border:1px solid var(--border); border-radius:10px;" placeholder="e.g. fly-tipping on X street" />
+            </label>
+
+            <label>
+              <span style="display:block; font-weight:650;">Postcode</span>
+              <input style="width:100%; padding:10px; border:1px solid var(--border); border-radius:10px;" placeholder="e.g. M20 3GR" />
+            </label>
+
+            <label>
+              <span style="display:block; font-weight:650;">Your email</span>
+              <input type="email" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:10px;" placeholder="name@example.com" />
+            </label>
+
+            <button type="submit" style="justify-self:start; padding:10px 14px; border-radius:10px; border:0; background: var(--accent); color:#fff; font-weight:700; cursor:pointer;">
+              Send
+            </button>
+
+            <p class="fineprint" style="margin:0">
+              We’ll only use your details to respond to your enquiry. <a href="#privacy">Privacy notice</a>.
+            </p>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <strong>Example Ward Party</strong>
+          <p class="fineprint" style="margin-top:8px">
+            This is a proof of concept layout for a simple, accessible local political site.
+            Swap branding/colours per party, keep structure consistent.
+          </p>
+          <p class="fineprint" id="accessibility">
+            Accessibility: built with semantic HTML, keyboard focus styles, and responsive layout.
+          </p>
+        </div>
+
+        <div>
+          <strong id="privacy">Privacy</strong>
+          <p class="fineprint">Add your privacy notice and data handling details here.</p>
+        </div>
+
+        <div>
+          <strong>Links</strong>
+          <p class="fineprint"><a href="#">Membership</a></p>
+          <p class="fineprint"><a href="#">Volunteer</a></p>
+          <p class="fineprint"><a href="#">Donate</a></p>
+        </div>
+      </div>
+      <p class="fineprint" style="margin-top:16px; opacity:0.7;">
+        © <span id="year"></span> Example Ward Party
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
